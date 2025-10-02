@@ -1,0 +1,383 @@
+[tools]
+python = "3.11"
+hugo = "latest"
+
+[env]
+VIRTUAL_ENV = "{{config_root}}/.venv"
+PATH = "{{config_root}}/.venv/bin:{{env.PATH}}"
+
+[settings]
+# Auto-install tools when mise is invoked
+always_keep_download = true
+always_keep_install = true
+
+[tasks]
+# Core PDF creation tasks
+create-pdf = [
+  "python create_pdf.py",
+  "echo '✅ PDF created successfully!'",
+  "echo '📄 Your PDF is located at: game/output/game.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   2. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+create-pdf-poker = [
+  "python create_pdf.py --card_size poker --paper_size a4",
+  "echo '✅ Poker-sized cards PDF created successfully!'",
+  "echo '📄 Your PDF is located at: game/output/game.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   2. Print it on A4 cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the poker cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+create-pdf-japanese = [
+  "python create_pdf.py --card_size japanese --paper_size a4",
+  "echo '✅ Japanese-sized cards PDF created successfully!'",
+  "echo '📄 Your PDF is located at: game/output/game.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   2. Print it on A4 cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the Japanese cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+create-pdf-high-quality = [
+  "python create_pdf.py --ppi 600 --quality 100",
+  "echo '✅ High-quality PDF created successfully!'",
+  "echo '📄 Your PDF is located at: game/output/game.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   2. Print it on high-quality cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the appropriate cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '⚠️  Note: This PDF is larger due to high quality settings'",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+create-pdf-with-offset = [
+  "python create_pdf.py --load_offset",
+  "echo '✅ PDF with offset calibration created successfully!'",
+  "echo '📄 Your PDF is located at: game/output/game.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   2. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the appropriate cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '✅ Offset calibration applied for better front/back alignment'"
+]
+
+# Offset management
+offset-pdf = [
+  "python offset_pdf.py",
+  "echo '✅ Offset applied to PDF!'",
+  "echo '📄 Your offset PDF is located at: game/output/game_offset.pdf'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Open game/output/game_offset.pdf in your PDF viewer'",
+  "echo '   2. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   3. Use the appropriate cutting template from cutting_templates/ directory'",
+  "echo '   4. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: Run mise run save-offset to remember this offset for future PDFs'"
+]
+
+save-offset = [
+  "python offset_pdf.py --save",
+  "echo '✅ Offset saved successfully!'",
+  "echo '💾 Your printer offset has been saved'",
+  "echo '🔄 Next time you run mise run create-pdf-with-offset, this offset will be applied automatically'",
+  "echo ''",
+  "echo '💡 Tip: You can still override the saved offset by running mise run offset-pdf with specific values'"
+]
+
+# Documentation
+docs = [
+  "hugo server serve -D",
+  "echo '📖 Documentation server started!'",
+  "echo '🌐 Open your browser and visit: http://localhost:1313'",
+  "echo '📚 Browse tutorials, guides, and examples'",
+  "echo '🛑 Press Ctrl+C to stop the server when done'"
+]
+
+docs-build = [
+  "hugo --minify",
+  "echo '✅ Documentation built successfully!'",
+  "echo '📁 Static files are in the public/ directory'",
+  "echo '🚀 Ready for deployment or offline viewing'"
+]
+
+# Utility tasks
+clean = [
+  "python clean_up.py",
+  "echo '✅ Cleanup completed!'",
+  "echo '🗑️  Temporary files have been removed'",
+  "echo '📁 Your card images and PDFs are still safe in their directories'"
+]
+
+calibrate = [
+  "echo '🎯 Printer Calibration Guide'",
+  "echo '============================'",
+  "echo ''",
+  "echo '📋 Step 1: Print calibration sheets'",
+  "echo '   • Open calibration/ directory'",
+  "echo '   • Print the PDF that matches your paper size:'",
+  "echo '     - letter_calibration.pdf (8.5x11 inches)'",
+  "echo '     - a4_calibration.pdf (210x297 mm)'",
+  "echo '     - a3_calibration.pdf (297x420 mm)'",
+  "echo '     - tabloid_calibration.pdf (11x17 inches)'",
+  "echo '     - archb_calibration.pdf (12x18 inches)'",
+  "echo ''",
+  "echo '🔍 Step 2: Find the aligned squares'",
+  "echo '   • Shine a strong light on the front page'",
+  "echo '   • Look at the shadows on the back page'",
+  "echo '   • Find which front and back squares are perfectly aligned'",
+  "echo '   • Note the coordinates (e.g., -1, 2)'",
+  "echo ''",
+  "echo '⚙️  Step 3: Apply the offset'",
+  "echo '   • Run: mise run offset-pdf --x_offset [X] --y_offset [Y]'",
+  "echo '   • Replace [X] and [Y] with your coordinates'",
+  "echo '   • Example: mise run offset-pdf --x_offset -1 --y_offset 2'",
+  "echo ''",
+  "echo '💾 Step 4: Save the offset (optional)'",
+  "echo '   • Run: mise run save-offset'",
+  "echo '   • This will remember your offset for future PDFs'",
+  "echo ''",
+  "echo '💡 Pro tip: Use the same cardstock you plan to use for your cards!'"
+]
+
+# Plugin tasks - Riftbound
+riftbound-fetch-tts = [
+  "python plugins/riftbound/fetch.py game/decklist/deck.txt tts",
+  "echo '✅ Riftbound cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+riftbound-fetch-pixelborn = [
+  "python plugins/riftbound/fetch.py game/decklist/deck.txt pixelborn",
+  "echo '✅ Riftbound cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+riftbound-fetch-piltover = [
+  "python plugins/riftbound/fetch.py game/decklist/deck.txt piltover_archive",
+  "echo '✅ Riftbound cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+riftbound-fetch-piltover-riftmana = [
+  "python plugins/riftbound/fetch.py game/decklist/deck.txt piltover_archive --source riftmana",
+  "echo '✅ Riftbound cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+# Plugin tasks - Lorcana
+lorcana-fetch = [
+  "python plugins/lorcana/fetch.py game/decklist/deck.txt dreamborn",
+  "echo '✅ Lorcana cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+# Plugin tasks - MTG
+mtg-fetch-mtga = [
+  "python plugins/mtg/fetch.py game/decklist/deck.txt mtga",
+  "echo '✅ Magic: The Gathering cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+mtg-fetch-moxfield = [
+  "python plugins/mtg/fetch.py game/decklist/deck.txt moxfield",
+  "echo '✅ Magic: The Gathering cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+mtg-fetch-scryfall = [
+  "python plugins/mtg/fetch.py game/decklist/deck.txt scryfall",
+  "echo '✅ Magic: The Gathering cards fetched successfully!'",
+  "echo '📁 Card images saved to: game/front/'",
+  "echo '🖨️  Next steps:'",
+  "echo '   1. Run: mise run create-pdf'",
+  "echo '   2. Open game/output/game.pdf in your PDF viewer'",
+  "echo '   3. Print it on cardstock (recommended: 300gsm or higher)'",
+  "echo '   4. Use the cutting template from cutting_templates/ directory'",
+  "echo '   5. Cut out your cards with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Tip: For better alignment, run: mise run calibrate'"
+]
+
+# Plugin tasks - Yu-Gi-Oh!
+yugioh-fetch-ydk = "python plugins/yugioh/fetch.py game/decklist/deck.txt ydk"
+yugioh-fetch-ydke = "python plugins/yugioh/fetch.py game/decklist/deck.txt ydke"
+
+# Plugin tasks - Digimon
+digimon-fetch-tts = "python plugins/digimon/fetch.py game/decklist/deck.txt tts"
+digimon-fetch-digimoncard = "python plugins/digimon/fetch.py game/decklist/deck.txt digimoncard"
+
+# Plugin tasks - One Piece
+onepiece-fetch-optsg = "python plugins/one_piece/fetch.py game/decklist/deck.txt optcg_simulator"
+onepiece-fetch-egman = "python plugins/one_piece/fetch.py game/decklist/deck.txt egman_events"
+
+# Plugin tasks - Flesh and Blood
+fab-fetch-fabrary = "python plugins/flesh_and_blood/fetch.py game/decklist/deck.txt fabrary"
+
+# Plugin tasks - Grand Archive
+ga-fetch-omnideck = "python plugins/grand_archive/fetch.py game/decklist/deck.txt omnideck"
+
+# Plugin tasks - Gundam
+gundam-fetch-deckplanet = "python plugins/gundam/fetch.py game/decklist/deck.txt deckplanet"
+gundam-fetch-limitless = "python plugins/gundam/fetch.py game/decklist/deck.txt limitless_tcg"
+
+# Plugin tasks - Altered
+altered-fetch-ajordat = "python plugins/altered/fetch.py game/decklist/deck.txt ajordat"
+
+# Plugin tasks - Netrunner
+netrunner-fetch-text = "python plugins/netrunner/fetch.py game/decklist/deck.txt text"
+netrunner-fetch-jinteki = "python plugins/netrunner/fetch.py game/decklist/deck.txt jinteki"
+
+# Workflow tasks (combine fetch + create PDF)
+riftbound-workflow = [
+  "echo '🎴 Riftbound Card Creation Workflow'",
+  "echo '====================================='",
+  "echo ''",
+  "echo '📋 Step 1: Prepare your decklist'",
+  "echo '   • Copy your Riftbound decklist'",
+  "echo '   • Save it as: game/decklist/deck.txt'",
+  "echo '   • Supported formats: TTS, Pixelborn, Piltover Archive'",
+  "echo ''",
+  "echo '📥 Step 2: Fetch card images'",
+  "echo '   • TTS format: mise run riftbound-fetch-tts'",
+  "echo '   • Pixelborn format: mise run riftbound-fetch-pixelborn'",
+  "echo '   • Piltover Archive: mise run riftbound-fetch-piltover'",
+  "echo ''",
+  "echo '📄 Step 3: Create PDF'",
+  "echo '   • Run: mise run create-pdf'",
+  "echo '   • Your PDF will be at: game/output/game.pdf'",
+  "echo ''",
+  "echo '🖨️  Step 4: Print and cut'",
+  "echo '   • Print on cardstock (300gsm recommended)'",
+  "echo '   • Use cutting template from cutting_templates/ directory'",
+  "echo '   • Cut with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Pro tip: Run mise run calibrate for better alignment!'"
+]
+
+lorcana-workflow = [
+  "echo '🎴 Lorcana Card Creation Workflow'",
+  "echo '================================='",
+  "echo ''",
+  "echo '📋 Step 1: Prepare your decklist'",
+  "echo '   • Export your deck from Dreamborn.ink'",
+  "echo '   • Save it as: game/decklist/deck.txt'",
+  "echo '   • Format: Dreamborn (one card per line)'",
+  "echo ''",
+  "echo '📥 Step 2: Fetch card images'",
+  "echo '   • Run: mise run lorcana-fetch'",
+  "echo '   • This downloads images from Lorcast.com'",
+  "echo ''",
+  "echo '📄 Step 3: Create PDF'",
+  "echo '   • Run: mise run create-pdf'",
+  "echo '   • Your PDF will be at: game/output/game.pdf'",
+  "echo ''",
+  "echo '🖨️  Step 4: Print and cut'",
+  "echo '   • Print on cardstock (300gsm recommended)'",
+  "echo '   • Use cutting template from cutting_templates/ directory'",
+  "echo '   • Cut with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Pro tip: Run mise run calibrate for better alignment!'"
+]
+
+mtg-workflow = [
+  "echo '🎴 Magic: The Gathering Card Creation Workflow'",
+  "echo '============================================='",
+  "echo ''",
+  "echo '📋 Step 1: Prepare your decklist'",
+  "echo '   • Copy your MTG decklist'",
+  "echo '   • Save it as: game/decklist/deck.txt'",
+  "echo '   • Supported formats: MTGA, Moxfield, Scryfall'",
+  "echo ''",
+  "echo '📥 Step 2: Fetch card images'",
+  "echo '   • MTGA format: mise run mtg-fetch-mtga'",
+  "echo '   • Moxfield format: mise run mtg-fetch-moxfield'",
+  "echo '   • Scryfall format: mise run mtg-fetch-scryfall'",
+  "echo ''",
+  "echo '📄 Step 3: Create PDF'",
+  "echo '   • Run: mise run create-pdf'",
+  "echo '   • Your PDF will be at: game/output/game.pdf'",
+  "echo ''",
+  "echo '🖨️  Step 4: Print and cut'",
+  "echo '   • Print on cardstock (300gsm recommended)'",
+  "echo '   • Use cutting template from cutting_templates/ directory'",
+  "echo '   • Cut with your Silhouette machine'",
+  "echo ''",
+  "echo '💡 Pro tip: Run mise run calibrate for better alignment!'"
+]
+
+# Help task
+help = "echo 'Available tasks:'; mise tasks | grep -E '^[a-zA-Z]' | sort"
