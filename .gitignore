@@ -19,3 +19,6 @@ data
 images/*.xcf
 
 hugo/public/
+
+.venv/
+.vscode/
