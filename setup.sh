@@ -195,19 +195,28 @@ setup_project() {
     # Make .envrc executable
     chmod +x .envrc
     
+    # Trust mise configuration
+    print_status "Trusting mise configuration..."
+    mise trust
+    print_success "mise configuration trusted"
+    
+    # Allow direnv
+    print_status "Allowing direnv..."
+    direnv allow
+    print_success "direnv allowed"
+    
     print_success "Project setup complete!"
     print_status ""
     print_status "Next steps:"
     print_status "1. Restart your terminal or run: source ~/.zshrc (or ~/.bashrc)"
     print_status "2. Navigate to this directory: cd $(pwd)"
-    print_status "3. Allow direnv: direnv allow"
-    print_status "4. Place your card images in the appropriate folders:"
+    print_status "3. Place your card images in the appropriate folders:"
     print_status "   - Front images: game/front/"
     print_status "   - Back images: game/back/"
     print_status "   - Double-sided backs: game/double_sided/"
-    print_status "5. Run: python create_pdf.py"
+    print_status "4. Run: mise run create-pdf (or python create_pdf.py)"
     print_status ""
-    print_status "For documentation: hugo server serve -D (then visit http://localhost:1313)"
+    print_status "For documentation: mise run docs (then visit http://localhost:1313)"
 }
 
 # Main execution

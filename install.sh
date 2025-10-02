@@ -2,7 +2,7 @@
 
 # Silhouette Card Maker - One-Liner Installer
 # This script downloads, sets up, and configures everything automatically
-# Usage: curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
+# Usage: curl -sSL https://raw.githubusercontent.com/mmorrison/silhouette-card-maker/main/install.sh | bash
 
 set -e  # Exit on any error
 
@@ -189,7 +189,7 @@ download_and_setup() {
     fi
     
     # Clone the repository
-    git clone https://github.com/Alan-Cha/silhouette-card-maker.git "$install_dir"
+    git clone https://github.com/mmorrison/silhouette-card-maker.git "$install_dir"
     
     print_success "Project downloaded to $install_dir"
     
@@ -213,8 +213,12 @@ download_and_setup() {
     # Trust mise configuration
     print_step "Configuring mise..."
     mise trust
-    
     print_success "mise configuration trusted"
+    
+    # Allow direnv
+    print_step "Allowing direnv..."
+    direnv allow
+    print_success "direnv allowed"
 }
 
 # Function to show final instructions
@@ -231,7 +235,6 @@ show_final_instructions() {
     print_status "Next steps:"
     print_status "1. Restart your terminal or run: source ~/.zshrc (or ~/.bashrc)"
     print_status "2. Navigate to the project: cd $install_dir"
-    print_status "3. Allow direnv: direnv allow"
     print_status ""
     print_status "Quick start examples:"
     print_status "• Riftbound cards: mise run riftbound-workflow"

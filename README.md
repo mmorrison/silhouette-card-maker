@@ -8,6 +8,22 @@ You can do it all with the press of a button and a cutting machine! And I can sh
 
 If this is your first time here, check out the [tutorial](https://alan-cha.github.io/silhouette-card-maker/tutorial/)! Please join our [Discord server](https://discord.gg/jhsKmAgbXc) too!
 
+## 🚀 Quick Start
+
+**One command setup (recommended):**
+```bash
+curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
+```
+
+**Manual setup:**
+```bash
+git clone https://github.com/Alan-Cha/silhouette-card-maker.git
+cd silhouette-card-maker
+./setup.sh
+```
+
+See [INSTALL.md](INSTALL.md) for detailed installation instructions or [SETUP.md](SETUP.md) for manual setup.
+
 ## Demo
 
 Watch me cut **104 cards in 26 minutes** without breaking a sweat!

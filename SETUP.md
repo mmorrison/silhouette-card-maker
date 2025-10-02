@@ -10,7 +10,7 @@ This guide will help you set up the Silhouette Card Maker project quickly and ea
 curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
 ```
 
-That's it! This will:
+That's it! This **install script** will:
 - ✅ Download the project automatically
 - ✅ Install mise and direnv
 - ✅ Set up your shell configuration
@@ -19,7 +19,7 @@ That's it! This will:
 
 ## 🚀 Manual Setup (Alternative)
 
-If you prefer to download manually:
+If you prefer to download the project manually first, then use the **setup script**:
 
 ### Step 1: Download the Project
 ```bash
@@ -36,11 +36,28 @@ chmod +x setup.sh
 ```
 
 ### Step 3: Follow the Instructions
-The setup script will guide you through:
+The **setup script** will guide you through:
 - Installing mise (tool manager)
 - Installing direnv (environment manager)
 - Setting up your shell configuration
 - Creating necessary directories
+
+**Note**: The setup script assumes you already have the project downloaded. It does NOT download the project for you.
+
+## 📋 Install vs Setup Scripts
+
+| Feature | Install Script | Setup Script |
+|---------|---------------|--------------|
+| **Downloads Project** | ✅ Yes | ❌ No |
+| **Installs Tools** | ✅ Yes | ✅ Yes |
+| **Shell Integration** | ✅ Yes | ✅ Yes |
+| **Creates Directories** | ✅ Yes | ✅ Yes |
+| **One Command** | ✅ Yes | ❌ No (need to clone first) |
+| **Best For** | New users | Developers/manual control |
+
+### When to Use Which:
+- **Use Install Script**: First time setup, want everything automated
+- **Use Setup Script**: Already cloned the repo, want manual control
 
 ### Step 4: Restart Your Terminal
 After the setup completes, restart your terminal or run:

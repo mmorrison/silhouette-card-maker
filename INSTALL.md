@@ -1,14 +1,28 @@
 # 🎴 Silhouette Card Maker - One-Liner Installer
 
-The easiest way to get started with Silhouette Card Maker!
+The easiest way to get started with Silhouette Card Maker! This installer downloads everything and sets it up automatically.
+
+**This is different from the setup script** - the installer downloads the project for you, while the setup script assumes you already have it downloaded.
 
 ## 🚀 Install Everything with One Command
 
-**Copy and paste this command into your terminal:**
-
+### **macOS/Linux:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
 ```
+
+### **Windows (PowerShell):**
+```powershell
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.ps1").Content
+```
+
+### **Windows (Command Prompt):**
+1. Download `install.bat` from the repository
+2. Run it from Command Prompt
+
+## 🔄 Alternative: Manual Setup
+
+If you prefer to download the project manually first, see [SETUP.md](SETUP.md) for instructions using the setup script instead.
 
 ## ✨ What This Does
 
@@ -46,9 +60,10 @@ mise run docs
 
 ## 🛠️ Supported Platforms
 
-- ✅ **macOS** (with or without Homebrew)
-- ✅ **Linux** (Ubuntu, Debian, CentOS, Fedora, Arch)
-- ❌ **Windows** (use the manual setup instead)
+- ✅ **macOS** (with or without Homebrew) - Full mise/direnv support
+- ✅ **Linux** (Ubuntu, Debian, CentOS, Fedora, Arch) - Full mise/direnv support
+- ✅ **Windows** (PowerShell/Command Prompt) - Full mise/direnv support via Scoop
+- ✅ **Windows Subsystem for Linux (WSL)** - Full mise/direnv support
 
 ## 🆘 Troubleshooting
 
@@ -65,6 +80,13 @@ mise run docs
 ### If you get permission errors:
 1. Make sure you have write access to your home directory
 2. Try running with `sudo` if necessary (though not recommended)
+
+### Windows-specific issues:
+1. **PowerShell execution policy**: Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+2. **Scoop installation fails**: Try running PowerShell as Administrator
+3. **mise not found**: Make sure Scoop is in your PATH, restart terminal
+4. **direnv not working**: Check PowerShell profile configuration
+5. **Python not found**: Install Python from https://python.org (add to PATH)
 
 ## 📚 More Information
 

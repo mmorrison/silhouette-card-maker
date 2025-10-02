@@ -1,18 +1,68 @@
 @echo off
-REM Silhouette Card Maker - Windows One-Liner Installer
-REM This script downloads, sets up, and configures everything automatically
-REM Usage: curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.bat | cmd
+REM Silhouette Card Maker - Windows Setup Script
+REM This script sets up the Silhouette Card Maker project on Windows
+REM Usage: Download this file and run it, or use PowerShell to download and run
 
-echo 🎴 Silhouette Card Maker - Windows Installer
-echo ============================================
+echo 🎴 Silhouette Card Maker - Windows Setup
+echo ======================================
 echo.
+
+REM Check if Scoop is available
+scoop --version >nul 2>&1
+if errorlevel 1 (
+    echo [INFO] Scoop not found. Installing Scoop...
+    powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression"
+    if errorlevel 1 (
+        echo [ERROR] Failed to install Scoop
+        echo [INFO] Please install Scoop manually from https://scoop.sh
+        pause
+        exit /b 1
+    )
+    echo [SUCCESS] Scoop installed successfully
+) else (
+    echo [SUCCESS] Scoop is already installed
+)
+
+REM Install mise using Scoop
+echo [INFO] Installing mise using Scoop...
+scoop install mise
+if errorlevel 1 (
+    echo [ERROR] Failed to install mise
+    pause
+    exit /b 1
+)
+echo [SUCCESS] mise installed successfully
+
+REM Install direnv using Scoop
+echo [INFO] Installing direnv using Scoop...
+scoop install direnv
+if errorlevel 1 (
+    echo [WARNING] Failed to install direnv. Continuing without it...
+) else (
+    echo [SUCCESS] direnv installed successfully
+)
 
 REM Check if we're in the right directory
 if not exist "create_pdf.py" (
-    echo [ERROR] This script must be run from the Silhouette Card Maker project directory
-    echo [ERROR] Please download the project first or use the web installer
-    pause
-    exit /b 1
+    echo [INFO] Setting up Silhouette Card Maker project...
+    echo [INFO] Downloading project to: %USERPROFILE%\silhouette-card-maker
+    
+    REM Remove existing directory if it exists
+    if exist "%USERPROFILE%\silhouette-card-maker" (
+        echo [WARNING] Directory %USERPROFILE%\silhouette-card-maker already exists. Removing it...
+        rmdir /s /q "%USERPROFILE%\silhouette-card-maker"
+    )
+    
+    REM Clone the repository
+    git clone https://github.com/Alan-Cha/silhouette-card-maker.git "%USERPROFILE%\silhouette-card-maker"
+    if errorlevel 1 (
+        echo [ERROR] Failed to download project
+        pause
+        exit /b 1
+    )
+    
+    echo [SUCCESS] Project downloaded successfully
+    cd "%USERPROFILE%\silhouette-card-maker"
 )
 
 REM Check for required files
@@ -64,6 +114,24 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM Trust mise configuration
+echo [INFO] Trusting mise configuration...
+mise trust
+if errorlevel 1 (
+    echo [WARNING] Failed to trust mise configuration
+) else (
+    echo [SUCCESS] mise configuration trusted
+)
+
+REM Allow direnv
+echo [INFO] Allowing direnv...
+direnv allow
+if errorlevel 1 (
+    echo [WARNING] Failed to allow direnv
+) else (
+    echo [SUCCESS] direnv allowed
+)
+
 REM Initialize Hugo submodule if hugo directory exists
 if exist "hugo" (
     if not exist "hugo\themes\hextra\.git" (
@@ -76,13 +144,19 @@ echo.
 echo [SUCCESS] Project setup complete!
 echo.
 echo Next steps:
-echo 1. Place your card images in the appropriate folders:
+echo 1. Restart PowerShell or Command Prompt
+echo 2. Navigate to the project: cd %USERPROFILE%\silhouette-card-maker
+echo 3. Place your card images in the appropriate folders:
 echo    - Front images: game\front\
 echo    - Back images: game\back\
 echo    - Double-sided backs: game\double_sided\
-echo 2. Run: .venv\Scripts\activate.bat
-echo 3. Run: python create_pdf.py
 echo.
-echo For documentation: hugo server serve -D (then visit http://localhost:1313)
+echo Quick start examples:
+echo • Riftbound cards: mise run riftbound-workflow
+echo • Lorcana cards: mise run lorcana-workflow
+echo • Magic: The Gathering: mise run mtg-workflow
+echo • See all tasks: mise run help
+echo.
+echo For documentation: mise run docs (then visit http://localhost:1313)
 echo.
 pause
