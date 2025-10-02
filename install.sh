@@ -188,10 +188,43 @@ download_and_setup() {
         rm -rf "$install_dir"
     fi
     
-    # Clone the repository
-    git clone https://github.com/mmorrison/silhouette-card-maker.git "$install_dir"
-    
-    print_success "Project downloaded to $install_dir"
+    # Download the repository (Git or ZIP)
+    if [ "$USE_ZIP" = "1" ]; then
+        print_status "Downloading project as ZIP file..."
+        if ! curl -L -o "$HOME/silhouette-card-maker.zip" "https://github.com/mmorrison/silhouette-card-maker/archive/refs/heads/main.zip"; then
+            print_warning "Enhanced version ZIP failed, trying original repository..."
+            if ! curl -L -o "$HOME/silhouette-card-maker.zip" "https://github.com/Alan-Cha/silhouette-card-maker/archive/refs/heads/main.zip"; then
+                print_error "Failed to download project ZIP from both repositories"
+                exit 1
+            fi
+        fi
+        
+        print_status "Extracting ZIP file..."
+        if ! unzip -q "$HOME/silhouette-card-maker.zip" -d "$HOME"; then
+            print_error "Failed to extract ZIP file"
+            exit 1
+        fi
+        
+        # Rename the extracted folder
+        if [ -d "$HOME/silhouette-card-maker-main" ]; then
+            mv "$HOME/silhouette-card-maker-main" "$install_dir"
+        fi
+        
+        # Clean up ZIP file
+        rm "$HOME/silhouette-card-maker.zip"
+        
+        print_success "Project downloaded and extracted successfully"
+    else
+        print_status "Attempting to clone enhanced version..."
+        if ! git clone https://github.com/mmorrison/silhouette-card-maker.git "$install_dir"; then
+            print_warning "Enhanced version not found, trying original repository..."
+            if ! git clone https://github.com/Alan-Cha/silhouette-card-maker.git "$install_dir"; then
+                print_error "Failed to download project from both repositories"
+                exit 1
+            fi
+        fi
+        print_success "Project downloaded successfully"
+    fi
     
     # Change to the project directory
     cd "$install_dir"
@@ -254,14 +287,18 @@ main() {
     print_header ""
     
     # Check for required tools
-    if ! command_exists git; then
-        print_error "Git is required but not installed. Please install Git first."
-        exit 1
-    fi
-    
     if ! command_exists curl; then
         print_error "curl is required but not installed. Please install curl first."
         exit 1
+    fi
+    
+    # Check if Git is available
+    if ! command_exists git; then
+        print_warning "Git is not installed. Will download ZIP file instead."
+        USE_ZIP=1
+    else
+        print_success "Git is available"
+        USE_ZIP=0
     fi
     
     # Install tools

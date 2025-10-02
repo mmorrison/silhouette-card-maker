@@ -7,6 +7,16 @@ echo 🎴 Silhouette Card Maker - Windows Setup
 echo ======================================
 echo.
 
+REM Check if Git is available
+git --version >nul 2>&1
+if errorlevel 1 (
+    echo [WARNING] Git is not installed. Will download ZIP file instead.
+    set USE_ZIP=1
+) else (
+    echo [SUCCESS] Git is available
+    set USE_ZIP=0
+)
+
 REM Check if Scoop is available
 scoop --version >nul 2>&1
 if errorlevel 1 (
@@ -53,15 +63,53 @@ if not exist "create_pdf.py" (
         rmdir /s /q "%USERPROFILE%\silhouette-card-maker"
     )
     
-    REM Clone the repository
-    git clone https://github.com/Alan-Cha/silhouette-card-maker.git "%USERPROFILE%\silhouette-card-maker"
-    if errorlevel 1 (
-        echo [ERROR] Failed to download project
-        pause
-        exit /b 1
+    if "%USE_ZIP%"=="1" (
+        echo [INFO] Downloading project as ZIP file...
+        powershell -Command "Invoke-WebRequest -Uri 'https://github.com/mmorrison/silhouette-card-maker/archive/refs/heads/main.zip' -OutFile '%USERPROFILE%\silhouette-card-maker.zip'"
+        if errorlevel 1 (
+            echo [WARNING] Enhanced version ZIP failed, trying original repository...
+            powershell -Command "Invoke-WebRequest -Uri 'https://github.com/Alan-Cha/silhouette-card-maker/archive/refs/heads/main.zip' -OutFile '%USERPROFILE%\silhouette-card-maker.zip'"
+        )
+        if errorlevel 1 (
+            echo [ERROR] Failed to download project ZIP
+            pause
+            exit /b 1
+        )
+        
+        echo [INFO] Extracting ZIP file...
+        powershell -Command "Expand-Archive -Path '%USERPROFILE%\silhouette-card-maker.zip' -DestinationPath '%USERPROFILE%' -Force"
+        if errorlevel 1 (
+            echo [ERROR] Failed to extract ZIP file
+            pause
+            exit /b 1
+        )
+        
+        REM Rename the extracted folder
+        if exist "%USERPROFILE%\silhouette-card-maker-main" (
+            move "%USERPROFILE%\silhouette-card-maker-main" "%USERPROFILE%\silhouette-card-maker"
+        )
+        
+        REM Clean up ZIP file
+        del "%USERPROFILE%\silhouette-card-maker.zip"
+        
+        echo [SUCCESS] Project downloaded and extracted successfully
+    ) else (
+        REM Clone the repository (try enhanced version first, fallback to original)
+        echo [INFO] Attempting to clone enhanced version...
+        git clone https://github.com/mmorrison/silhouette-card-maker.git "%USERPROFILE%\silhouette-card-maker"
+        if errorlevel 1 (
+            echo [WARNING] Enhanced version not found, trying original repository...
+            git clone https://github.com/Alan-Cha/silhouette-card-maker.git "%USERPROFILE%\silhouette-card-maker"
+        )
+        if errorlevel 1 (
+            echo [ERROR] Failed to download project
+            pause
+            exit /b 1
+        )
+        
+        echo [SUCCESS] Project downloaded successfully
     )
     
-    echo [SUCCESS] Project downloaded successfully
     cd "%USERPROFILE%\silhouette-card-maker"
 )
 

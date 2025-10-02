@@ -12,7 +12,7 @@ If this is your first time here, check out the [tutorial](https://alan-cha.githu
 
 **One command setup (recommended):**
 ```bash
-curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/mmorrison/silhouette-card-maker/main/install.sh | bash
 ```
 
 **Manual setup:**

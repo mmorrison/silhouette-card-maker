@@ -8,12 +8,12 @@ The easiest way to get started with Silhouette Card Maker! This installer downlo
 
 ### **macOS/Linux:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/mmorrison/silhouette-card-maker/main/install.sh | bash
 ```
 
 ### **Windows (PowerShell):**
 ```powershell
-Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.ps1").Content
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/mmorrison/silhouette-card-maker/main/install.ps1").Content
 ```
 
 ### **Windows (Command Prompt):**
@@ -68,7 +68,7 @@ mise run docs
 ## 🆘 Troubleshooting
 
 ### If the installer fails:
-1. Make sure you have `git` and `curl` installed
+1. Make sure you have `curl` installed (Git is optional - installer will use ZIP if Git is not available)
 2. Check your internet connection
 3. Try running the command again
 
@@ -87,6 +87,7 @@ mise run docs
 3. **mise not found**: Make sure Scoop is in your PATH, restart terminal
 4. **direnv not working**: Check PowerShell profile configuration
 5. **Python not found**: Install Python from https://python.org (add to PATH)
+6. **Git not found**: This is fine! The installer will automatically download a ZIP file instead
 
 ## 📚 More Information
 

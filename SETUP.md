@@ -7,7 +7,7 @@ This guide will help you set up the Silhouette Card Maker project quickly and ea
 **Just copy and paste this single command:**
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/Alan-Cha/silhouette-card-maker/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/mmorrison/silhouette-card-maker/main/install.sh | bash
 ```
 
 That's it! This **install script** will:

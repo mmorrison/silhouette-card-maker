@@ -40,6 +40,17 @@ function Install-SilhouetteCardMaker {
     Write-ColorOutput "===============================================" "Magenta"
     Write-Host ""
     
+# Check if Git is available
+try {
+    $gitVersion = git --version
+    Write-Success "Git is available: $gitVersion"
+    $useZip = $false
+}
+catch {
+    Write-Warning "Git is not installed. Will download ZIP file instead."
+    $useZip = $true
+}
+
 # Check if Scoop is available
 try {
     $scoopVersion = scoop --version
@@ -104,16 +115,66 @@ catch {
         Remove-Item -Path $installDir -Recurse -Force
     }
     
-    # Clone the repository
+    # Download the repository (Git or ZIP)
     Write-Status "Downloading Silhouette Card Maker..."
-    try {
-        git clone https://github.com/Alan-Cha/silhouette-card-maker.git $installDir
-        Write-Success "Project downloaded to $installDir"
+    
+    if ($useZip) {
+        Write-Status "Downloading project as ZIP file..."
+        try {
+            $zipPath = "$env:USERPROFILE\silhouette-card-maker.zip"
+            Invoke-WebRequest -Uri "https://github.com/mmorrison/silhouette-card-maker/archive/refs/heads/main.zip" -OutFile $zipPath
+            Write-Success "ZIP file downloaded"
+        }
+        catch {
+            Write-Warning "Enhanced version ZIP failed, trying original repository..."
+            try {
+                Invoke-WebRequest -Uri "https://github.com/Alan-Cha/silhouette-card-maker/archive/refs/heads/main.zip" -OutFile $zipPath
+                Write-Success "ZIP file downloaded"
+            }
+            catch {
+                Write-Error "Failed to download project ZIP from both repositories"
+                Read-Host "Press Enter to exit"
+                exit 1
+            }
+        }
+        
+        Write-Status "Extracting ZIP file..."
+        try {
+            Expand-Archive -Path $zipPath -DestinationPath $env:USERPROFILE -Force
+            Remove-Item $zipPath
+            
+            # Rename the extracted folder
+            $extractedDir = "$env:USERPROFILE\silhouette-card-maker-main"
+            if (Test-Path $extractedDir) {
+                Move-Item $extractedDir $installDir
+            }
+            
+            Write-Success "Project downloaded and extracted to $installDir"
+        }
+        catch {
+            Write-Error "Failed to extract ZIP file"
+            Read-Host "Press Enter to exit"
+            exit 1
+        }
     }
-    catch {
-        Write-Error "Failed to download project"
-        Read-Host "Press Enter to exit"
-        exit 1
+    else {
+        Write-Status "Attempting to clone enhanced version..."
+        try {
+            git clone https://github.com/mmorrison/silhouette-card-maker.git $installDir
+            Write-Success "Project downloaded to $installDir"
+        }
+        catch {
+            Write-Warning "Enhanced version not found, trying original repository..."
+            try {
+                git clone https://github.com/Alan-Cha/silhouette-card-maker.git $installDir
+                Write-Success "Project downloaded to $installDir"
+            }
+            catch {
+                Write-Error "Failed to download project from both repositories"
+                Read-Host "Press Enter to exit"
+                exit 1
+            }
+        }
     }
     
     # Change to project directory
